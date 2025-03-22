@@ -20,23 +20,36 @@ def multiplicar(p1, p2):
     return resultado
 
 def dividir(dividendo, divisor):
+    dividendo = dividendo.copy()
+    divisor = divisor.copy()
     cociente = {}
-    resto = dividendo.copy()
-    # Si el grado del divisor es mayor, se devuelve cociente vacío y resto igual al dividendo
-    while resto and max(resto) >= max(divisor):
-        exp_diff = max(resto) - max(divisor)
-        coef_div = resto[max(resto)] / divisor[max(divisor)]
-        cociente[exp_diff] = coef_div
 
-        subtrahend = {}
+    if not divisor:
+        return {}, dividendo  # No se puede dividir entre 0
+
+    while dividendo and max(dividendo) >= max(divisor):
+        exp_dividendo = max(dividendo)
+        exp_divisor = max(divisor)
+        coef_dividendo = dividendo[exp_dividendo]
+        coef_divisor = divisor[exp_divisor]
+
+        nuevo_exp = exp_dividendo - exp_divisor
+        nuevo_coef = coef_dividendo / coef_divisor
+        cociente[nuevo_exp] = nuevo_coef
+
+        # Generar el polinomio a restar
+        a_restar = {}
         for exp, coef in divisor.items():
-            nuevo_exp = exp + exp_diff
-            nuevo_coef = coef * coef_div
-            subtrahend[nuevo_exp] = nuevo_coef
+            a_restar[exp + nuevo_exp] = coef * nuevo_coef
 
-        resto = restar(resto, subtrahend)
+        # Restar el término del dividendo
+        for exp, coef in a_restar.items():
+            dividendo[exp] = dividendo.get(exp, 0) - coef
+            if abs(dividendo[exp]) < 1e-10:
+                del dividendo[exp]
 
-    return cociente, resto
+    return cociente, dividendo
+
 
 def evaluar(pol, valor):
     resultado = 0
