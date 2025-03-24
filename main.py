@@ -4,7 +4,7 @@ from operaciones_calculadora import (
 )
 
 # Convierte "2x4 + 3x2 - 5" a {4: 2, 2: 3, 0: -5}
-def parsear_polinomio(texto):
+def crear_polinomio(texto):
     texto = texto.replace(" -", "+-").replace("-", "+-")
     terminos = texto.split("+")
     pol = {}
@@ -85,11 +85,11 @@ def main():
             break
 
         p1_texto = input("Introduce el primer polinomio (ej: 2x^2 + 1): ")
-        p1 = parsear_polinomio(p1_texto)
+        p1 = crear_polinomio(p1_texto)
 
         if opcion in ["1", "2", "3", "4"]:
             p2_texto = input("Introduce el segundo polinomio: ")
-            p2 = parsear_polinomio(p2_texto)
+            p2 = crear_polinomio(p2_texto)
 
         if opcion == "1":
             resultado = sumar(p1, p2)
